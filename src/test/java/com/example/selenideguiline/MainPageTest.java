@@ -33,8 +33,9 @@ public class MainPageTest {
 
         Configuration.browser = "Chrome";
         Configuration.browserVersion = "109.0.5414.74";
-        Configuration.pageLoadStrategy = "eager";
+        Configuration.pageLoadStrategy = "normal";
         SelenideLogger.addListener("allure", new AllureSelenide());
+        Configuration.reportsFolder = "D:/AKC/selenide-guiline";
     }
 
     @BeforeEach
@@ -59,13 +60,16 @@ public class MainPageTest {
     }
 
     @Test
-    public void search() {
+    public void search() throws InterruptedException {
         open("https://serenity.aurascan.io/");
         $("app-wallet-connect").click();
+
         $(By.xpath("//li[@class='wallet-item']//span[contains(text(),'Keplr')]")).shouldBe(Condition.visible).click();
 
+//        sleep(5000);
         switchTo().window("Keplr");
-        $(By.xpath("//button[contains(text(), 'Approve')]")).shouldBe(Condition.visible).click();
+        $(By.xpath("//button[contains(text(), 'Approve')]")).wait(2000);
+        $(By.xpath("//button[contains(text(), 'Approve')]")).click();
         sleep(1000);
         switchTo().window(0);
         screenshot("result");
